@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% comment %} Template degli utenti registrati. {% endcomment %}
+
+{% block head %}
+	{% load staticfiles %}
+	<link rel="stylesheet" type="text/css" href="{% static 'portal/style.css' %}" />
+    <title> MovieAdvisor | {% block title %}{% endblock %}</title>
+{% endblock %}
+
+{% block body %}
+    <header>
+        <h1>MovieAdvisor | Web Portal</h1>
+    </header>
+    <section>
+        <ul>
+            <li><a href="{% url 'home' %}">Main Page</a></li>
+            <li><a href="{% url 'recensioni:elenco' %}"> Tutte le recensioni </a></li>
+			<li><a href="{% url 'home_reg:contatti' %}"> Contatti </a></li>
+			<li><a href="{% url 'recensioni:ricerca' %}"> Ricerca </a></li>
+            <li><a href="{% url 'recensioni:top100' %}"> Top100 recensioni </a></li>
+            <li><a href="{% url 'recensioni:nuovarec' %}"> Scrivi nuova recensione </a></li>
+            <li><a href="{% url 'logout_view' %}">Logout</a></li>
+        </ul>
+    </section>
+    
+    {% block content %}
+    {% endblock %}
+
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% comment  %} Pagina per la visualizzazione di liste. {% endcomment %}
+
+{% block bigtitle %}{% block title %} {{titolo}} {% endblock %}{% endblock %}
+
+{% block body_ext %}
+    {% if recensioni  %}
+        <ul>
+            {% for recensione in recensioni %}
+                <li>
+                    <a href="{% url 'recensioni:dettaglio' recensione.id %}">
+                        {{recensione.titolo}} 
+                    </a>
+                    {% if voti_on %} -- {{ recensione.num_voti }} 
+						comment{{ recensione.num_voti|pluralize }} --
+						{{ recensione.getRank|truncatechars:5 }} % apprezzamento
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p> Non ci sono recensioni. </p>
+    {% endif %}
+    
+    {% if suggerimenti  %}
+		{% if lista_sugg %}
+			<h3> Potrebbe interessarti anche.. </h3>
+			<ul>
+				{% for recensione in lista_sugg %}
+					<li>
+						<a href="{% url 'recensioni:dettaglio' recensione.id %}">
+							{{recensione.titolo}} 
+						</a>
+					</li>
+				{% endfor %}
+			</ul>
+		{% else %}
+			<p> Non ci sono suggerimenti.. Effettua il login e scrivi più commenti! </p>
+		{% endif %}
+	{% endif %}
+    
+{% endblock %}

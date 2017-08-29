@@ -1,0 +1,15 @@
+from django.core.exceptions import ObjectDoesNotExist
+
+# Funzione di test:
+# Testa un istanza e/o un metodo passato su di essa.
+def objectExist(istance, methodStr):
+	try:
+		if istance and methodStr:
+			getattr(istance, methodStr)
+		if istance:
+			istance
+	except ObjectDoesNotExist:
+		return False
+	except:
+		return False
+	return True

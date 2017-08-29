@@ -1,0 +1,19 @@
+{% extends "portal/portal.html" %}
+
+{% comment %} Pagina di benvenuto utenti registrati. {% endcomment %}
+
+{% block title %} Welcome {% endblock %}
+
+{% block content %}
+  <section>
+    
+    <h2>Welcome, {{ user.username | capfirst }}</h2>
+    <p>Grazie per esserti loggato. 
+    {% if user.first_name != '' %}
+		Buona lettura, {{user.first_name | capfirst}}!
+    {% else %}
+		Buona lettura!
+    {% endif %}</p>
+    
+  </section>
+{% endblock %}

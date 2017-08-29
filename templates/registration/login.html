@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% comment %}   Pagina per autenticare gli utenti. {% endcomment %}
+
+{% block head %} <title>MovieAdvisor | Login</title> {% endblock %}
+
+{% block body %}
+	<header>
+		<h1>Movieadvisor</h1>
+		<h2>Login Page</h2>
+	</header>
+	<section>
+		{% if form.errors %}
+		<p>Errore. Il tuo username e/o la tua password sono sbagliati.</p>
+		{% endif %}
+		<form method="post">
+			{% csrf_token %}
+			<p>
+				{{ form.username.label_tag }}
+				{{ form.username }}
+			</p>  <p>
+				{{ form.password.label_tag }}
+				{{ form.password }}
+			</p>
+			{% if next %}
+				<input type="hidden" name="next" value="{{ next }}" />
+			{% else %}
+				<input type="hidden" name="next" value="{% url 'home_reg:welcome' %}" />
+			{% endif %}
+			<input type="submit" value="Login" />
+			<button onclick="goHome()"> Back.. </button>
+		</form> 
+	</section>
+  
+	<script>
+		function goHome(){
+			window.location.href='{% url 'home' %}'
+		}
+	</script>
+{% endblock %}

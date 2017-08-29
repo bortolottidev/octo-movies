@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% comment  %} Pagina visualizzazione form. {% endcomment %}
+
+{% block bigtitle %}{% block title %} {{titolo}} {% endblock %}{% endblock %}
+
+{% block body_ext %}
+
+	<form method="POST"> 
+		{% csrf_token %}
+		{{form.as_p}}
+		<input type="submit" value="Invia!"> 
+		<button onclick="goHome()"> Back.. </button>
+		{% if next %}
+			<input type="hidden" name="next" value="{{ next }}" />
+		{% else %}
+			<input type="hidden" name="next" value="{% url 'home_reg:welcome' %}" />
+		{% endif %}
+	</form> 
+
+	<script>
+		function goHome(){
+			window.location.href='{% url 'home' %}'
+		}
+	</script>
+	
+{% endblock %}

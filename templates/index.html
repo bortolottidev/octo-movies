@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% comment  %} Pagina principale, utente guest. {% endcomment %}
+
+{% block bigtitle %}{% block title %} Indice {% endblock %}{% endblock %}
+
+{% block body_ext %}
+    <ul>
+        <li><a href="{% url 'recensioni:elenco' %}"> Tutte le recensioni </a></li>
+        <li><a href="{% url 'home_reg:contatti' %}"> Contatti </a></li>
+        <li><a href="{% url 'recensioni:ricerca' %}"> Ricerca </a></li>
+    </ul>
+
+    {% if recensioni %}
+        <h2> Ultime Recensioni: </h2>
+        {% for rec in recensioni %}
+            <h3> {{rec.titolo }} </h3>
+            {{rec.breve }} 
+            <a href="{% url 'recensioni:dettaglio' rec.id %}"> 
+				Leggi di più.. 
+			</a>
+        {% endfor %}
+    {% else %}
+        Ancora nessuna recensione.. Diventa il primo recensore!
+    {% endif %}
+    
+{% endblock %}
