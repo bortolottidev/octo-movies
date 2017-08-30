@@ -1,0 +1,27 @@
+X Inserisci possibilità di scrivere recensione utenti loggati
+X Inserisci possibilità votare recensione utenti loggati (piaciuto sì/no)
+X Inserisci sistema tag 
+--- Generazione tag automatica da parole importanti
+X Inserisci sistema rank (basato su ti è piaciuto sì/no)
+X Profilazione basata su recensioni piaciute (basato su ti è piaciuto sì/no)
+X Ricerca basata su profilazione, tag e altre cose (genere, ..)
+	La profilazione è stata inserita in "Potrebbe interessarti anche.."
+	
+
+[OPTIONAL]
+7+ Inserisci locandina film nella pagina recensione
+8+ Notifica quando si inserisce commento di una recensione propria
+9  sistemare pannello admin, anche se non troppo :x
+10 sistemare pagina contatti
+X  sistemare anteprima recensioni. Primi n caratteri e stop al punto.
+?	Registrazione user tramite piattaforma!?
+?	Profilo generato in automatico con registrazione utente
+X	Voto sì/no basato anche su recensori (si suppone uno sia sempre d'accordo con le proprie recensioni)
+
+X Inserimento dati casuali e dumbizzazione di essi
+? Testing di una parte del codice
+13+ File README con istruzioni
+X Scrittura Classi
+15+ Scrittura 10 pagine tesina
+16+ Mettere tutto su GitHub
+
