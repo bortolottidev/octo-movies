@@ -104,6 +104,8 @@ class Recensione(models.Model):
 		return self.autore
 	
 	def __allRec__():
+		if not Recensione.objects.all() :
+			return [None]
 		return Recensione.objects.all()
 	
 # Modello per i commenti alla recensione (1:n rispetto ad essa)
@@ -111,7 +113,7 @@ class Recensione(models.Model):
 # anche un eventuale voto Null ovvero neutrale.
 class Commento(models.Model):
 	recensione = models.ForeignKey(Recensione, on_delete=models.CASCADE,
-								default=Recensione.__allRec__()[3])
+								default=Recensione.__allRec__()[0])
 	autore = models.ForeignKey(settings.AUTH_USER_MODEL, 
 							on_delete=models.CASCADE, default=anonymous())
 	voto = models.NullBooleanField(default=0)
