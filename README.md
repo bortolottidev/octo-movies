@@ -1,5 +1,5 @@
 ##	Preparazione ambiente
-1.	Seguire le istruzioni presenti al [link](href="https://weblab.ing.unimore.it/people/canali/teaching/ld_1617/Risoluzione_Problemi_installazione.txt) 
+1.	Seguire le istruzioni presenti al [link](https://weblab.ing.unimore.it/people/canali/teaching/ld_1617/Risoluzione_Problemi_installazione.txt) 
 2.	pip install distance
 
 
@@ -20,4 +20,4 @@ I dati sono già pronti dopo il git pull. Per ripristinare il database originale
 1.	python manage.py loaddata db.json
 
 
-__Ulteriore documentazione presente nella cartella doc (progetto_LD.odt).__
+_Ulteriore documentazione presente nella cartella doc (progetto_LD.odt)._
