@@ -5,10 +5,8 @@
 
 ##	Scaricare da github il progetto
 1.	cd cartella-dove-scaricare
-2.	git init
-3.	git remote add origin https://github.com/ifritzord/octo-movies.git
-4.	git pull origin master
-	
+1.	git clone https://github.com/ifritzord/octo-movies.git LD_Proj
+
 	
 ##	Visualizzare il progetto
 1.	python manage.py runserver
@@ -16,8 +14,9 @@
 3.	Enjoy!
 
 
-I dati sono già pronti dopo il git pull. Per ripristinare il database originale, per un qualsiasi motivo:
+I dati sono già pronti dopo il git pull/clone. 
+Se dovete ripristinare il database originale, per un qualsiasi motivo:
 1.	python manage.py loaddata db.json
 
 
-_Ulteriore documentazione presente nella cartella doc (progetto_LD.odt)._
+_Ulteriore documentazione presente in doc/progetto_LD.odt._
