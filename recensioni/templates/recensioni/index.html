@@ -14,7 +14,7 @@
                     </a>
                     {% if voti_on %} -- {{ recensione.num_voti }} 
 						comment{{ recensione.num_voti|pluralize }} --
-						{{ recensione.getRank|truncatechars:5 }} % apprezzamento
+						{{ recensione.getRank|truncatechars:7 }} % apprezzamento
                     {% endif %}
                 </li>
             {% endfor %}

@@ -71,7 +71,7 @@ class Recensione(models.Model):
 		#print("ratio = "+str(ratio))
 		try:
 			if (ratio < 0) or (ratio > 1):
-				print("RATIO ERROR ON "+self+": "+str(ratio))
+				#print("RATIO ERROR ON "+self+": "+str(ratio))
 				raise Exception(1234, "Ratio isn't a ratio!")
 			pass
 		except:
@@ -92,7 +92,6 @@ class Recensione(models.Model):
 		return self.commento_set.count() 
 		
 	def breve(self):
-
 		testo_breve = self.testo[0:250]
 		prime_righe = testo_breve.split('.')
 		if len(prime_righe) != 1:

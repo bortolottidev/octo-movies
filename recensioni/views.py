@@ -9,9 +9,8 @@ from django.contrib import messages
 from django.utils.decorators import method_decorator
 from django.core.urlresolvers import reverse
 from LD_Proj.settings import URL_FORM, LOGIN_URL 
-from portal.utility import suggestFilm, anonymous
+from portal.utility import suggestFilm, anonymous, isOfficial
 from recensioni.forms import CommentForm
-import traceback
 
 url_index = 'recensioni/index.html'
 url_detail = 'recensioni/detail.html'
@@ -52,11 +51,10 @@ def ricerca (request):
 	# Profilazione della ricerca, se l'utente è loggato
 	user = request.user
 	suggestList = suggestFilm(user)
-			
 	if request.method == 'POST': #invio
 		form = ResearchForm(request.POST)
 		context = {'titolo':'Risultati ricerca', 'suggerimenti':1}
-		if not form.is_valid():
+		if form.is_valid():
 			title = form.cleaned_data['titolo']
 			result = Recensione.objects.filter(titolo__contains=title)
 			genre = form.cleaned_data['genere']
@@ -132,6 +130,8 @@ def insert_review (request):
 		recensione.rank = 50
 		if (recensione.autore != anonymous()) :
 			recensione.autore = request.user
+			if isOfficial(request.user):
+				recensione.rank = 80
 		if form.is_valid():
 			recensione.save()
 			form.save_m2m()

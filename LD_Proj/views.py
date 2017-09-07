@@ -17,6 +17,8 @@ def home (request):
     return render(request, HOMEPAGE_URL, context)
 
 # View durante il logout dell'utente, reindirizzo
+# Per essere rigorosi bisognerebbe inserire il decoratore 
+# @login_required, ma sarebbe stupido.
 def logout_view (request):
         logout(request)
         return  HttpResponseRedirect(LOGOUT_REDIRECT_URL)

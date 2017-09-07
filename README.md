@@ -3,14 +3,14 @@
 2.	pip install distance
 
 
-##	Scaricare da github il progetto:
+##	Scaricare da github il progetto
 1.	cd cartella-dove-scaricare
 2.	git init
 3.	git remote add origin https://github.com/ifritzord/octo-movies.git
 4.	git pull origin master
 	
 	
-##	Visualizzare il progetto:
+##	Visualizzare il progetto
 1.	python manage.py runserver
 2.	browse 127.0.0.1:8000
 3.	Enjoy!
