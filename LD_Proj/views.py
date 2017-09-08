@@ -7,6 +7,7 @@ from .settings import LOGIN_REDIRECT_URL, LOGOUT_REDIRECT_URL
 
 HOMEPAGE_URL = 'index.html'
 
+# Views homepage 
 def home (request):
     # Utente registrato
     if request.user.is_authenticated():
@@ -16,9 +17,9 @@ def home (request):
     context = {'recensioni':recensioni, 'homepage':'home'}
     return render(request, HOMEPAGE_URL, context)
 
-# View durante il logout dell'utente, reindirizzo
-# Per essere rigorosi bisognerebbe inserire il decoratore 
-# @login_required, ma sarebbe stupido.
+# View logout dell'utente
+# Per essere rigorosi (seguendo il progetto) bisognerebbe inserire il  
+# decoratore @login_required, ma introdurrebbe un ciclo login > logout > home
 def logout_view (request):
         logout(request)
         return  HttpResponseRedirect(LOGOUT_REDIRECT_URL)

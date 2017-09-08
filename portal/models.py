@@ -3,13 +3,18 @@ from django.contrib.auth.models import User
 from recensioni.utility import commentsAnalyzer
 from recensioni import models
 
-# Estremamente basso a causa del mio database fittizio
+# Voti richiesti per inserire l'utente nel sistema di vicinanza.
+# Più l'utente posta voti e commenti e più ci aspettiamo sia accurata la
+# sua profilazione.
+# Attualmente estremamente basso a causa del mio database fittizio
 VOTES_REQUIRED = 2
 
-# Profilo utente, per la profilizzazione dei suoi commenti rilasciati
+# Profilo utente
+# simVect: 	raccoglie in un vettore booleano tutti i commenti lasciati
+#			1 = commento positivo a recensione, 0 = commento negativo o nullo
+# check:	indica l'affidabilità del vettore booleano (ha abbastanza voti?)
 class UserProfile(Model):
 	user = OneToOneField(User, primary_key=True, default=None)
-	# L'utente è profilizzato con un vettore like/dislike dei commenti postati
 	simVect = CharField(max_length=5000, default="")
 	check = BooleanField(default=0)
 	
@@ -23,7 +28,7 @@ class UserProfile(Model):
 	def getUserId(self):
 		return self.user.id
 	
-	# aggiorna e restituisce il vettore profilo
+	# Aggiorna e restituisce il vettore profilo
 	def getVect(self): 
 		vect = []
 		count = 0
