@@ -17,20 +17,14 @@ url_detail = 'recensioni/detail.html'
 url_insert = URL_FORM
 url_ricerca = URL_FORM
 
-# View generica per renderizzare una lista di recensioni
-# Questa funzione è troppo poco generica, non serve a niente, tbh
+# Funzione generica per renderizzare una lista di recensioni 
+# La lista viene inserita nel context con il nome 'recensioni'
 def list_render (request, lista, context):
 	try:
 		context.update({'recensioni':lista, 'request':request})
 	except:
 		context = {'recensioni':lista, 'request':request}
 	return render(request, url_index, context)
-
-"""class IndexView(generic.ListView):
-	template_name = url_index
-	context_object_name = 'recensioni'
-	def get_queryset(self):
-		return Recensione.objects.all()"""
 
 # View dell'elenco completo delle recensioni
 def elenco (request):
@@ -70,7 +64,8 @@ def ricerca (request):
 			for film in result:
 				if film in suggestList:
 						suggestList.remove(film)
-			# Passo i primi film della lista suggerimenti..
+			# Passo soltanto primi film della lista suggerimenti..
+			# Possibili update: passare i primi X % film suggeriti
 			context['lista_sugg'] = suggestList[:5]
 			return list_render (request, result, context)
 		else:
@@ -83,18 +78,14 @@ def ricerca (request):
 		return render(request, url_ricerca, context)
 	
 """ 
-Questa pagina presenta le recensioni più in voga, che per semplicità
-ho deciso essere le recensioni più votate.
-Il numero dei voti è poi moltiplicato per un coefficente che dipende dal rank
-globale della recensione attualmente.
-Nelle prossime versioni sarà introdotto una funzione che sfrutta la profilazione
-degli utenti ottenuta da portal.
-L'algoritmo di ordinamento altro non è che la funzione sorted() di python.
+Questa pagina presenta le recensioni più apprezzate, sfruttando numero dei
+voti ricevuto e coefficente rank.
+La recensione sarà tanto più popolare quanto più è discussa (num_voti) e 
+popolare (getRank - coefficente da 0 a 1)!
 """
 @method_decorator(login_required(), name='dispatch')
 class top100view (generic.ListView):
 	template_name = url_index
-	#context_object_name = 'recensioni'
 	
 	def get_queryset(self):
 		list = {}
@@ -113,7 +104,7 @@ class top100view (generic.ListView):
 
 """
 View per l'inserimento di nuove recensioni.
-Necessità di essere loggati e avere permesso di postare.
+Richiede di essere loggati e avere permesso di postare.
 Permesso presente di default, che però può essere rimosso dagli admin.
 In caso di mancanza del permesso si viene reindirizzati ad un 403.
 """
@@ -143,6 +134,7 @@ def insert_review (request):
 						'Errore: Hai inserito un tipo di dato non valido.')
 			return HttpResponseRedirect(reverse('recensioni:nuovarec'))
 
+# Stesso funzionamento dell'inserimento di nuove recensioni
 @login_required
 @permission_required('recensioni.add_commento', raise_exception=True)
 def insert_comment (request, rec_id):
@@ -157,5 +149,5 @@ def insert_comment (request, rec_id):
 		commento.recensione = recensione
 		commento.autore = request.user
 		commento.save()
-		recensione.__rankUpdate__() # forzo aggiornamento del rank
+		recensione.__rankUpdate__() 
 		return render(request, url_detail, {'recensione':recensione})

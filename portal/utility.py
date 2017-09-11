@@ -14,25 +14,7 @@ THRESHOLD = 0.15
 
 officialGroup = 'Recensori ufficiali'
 
-# Funzione utilizzata solo via shell per assicurarsi che tutti gli user
-# abbiano un proprio profilo e i permessi necessari.
-def __Setup__ ():
-	for u in User.objects.all():
-		if not objectExist(u, "userprofile"):
-			profile = UserProfile(user=u)
-			profile.save()
-			
-	group = Group.objects.get(name='Utenti')		
-	group2 = Group.objects.get(name=officialGroup)
-	for u in User.objects.all():
-		#print(u.userprofile)
-		check = u.username
-		if (check == "admin") or (check == "Comicfan") or (check == "Cineuser"):
-			u.groups.add(group, group2)
-		else:
-			u.groups.add(group)
-
-# Check di controllo sull'user. Fa parte del gruppo recensori pro?
+# Check di controllo su myUser. Fa parte del gruppo recensori pro?
 def isOfficial (myUser):
 	group = Group.objects.get(name=officialGroup)
 	for user in group:
@@ -40,8 +22,8 @@ def isOfficial (myUser):
 			return True
 	return False
 
-# Ritorna la lista dei film suggeriti per un certo user, in base all'utente a
-# lui più vicino
+# Ritorna la lista dei film suggeriti per un certo user, 
+# in base all'utente più simile al nostro myUser
 def suggestFilm (myUser):
 	suggList = []
 	if myUser:
@@ -51,11 +33,9 @@ def suggestFilm (myUser):
 				raise Exception(333, "User anonymous")
 			nearbyUser = closestProfile(myUser)
 			myList = eval(getattr(myUser, "userprofile").getVect())
-			#print(myList)
 			nearbyList = eval(getattr(nearbyUser, "userprofile").getVect())
 			count = 0
 			for i in models.Recensione.__allRec__():
-				#print(count, i, myList[count], nearbyList[count])
 				if (myList[count] != nearbyList[count]):
 					suggList.append(i)
 				count = count+1
@@ -65,10 +45,9 @@ def suggestFilm (myUser):
 	else:
 		return suggList
 
-# Cerca il profilo più "vicino" al nostro utente, attraverso l'analisi
-# dei loro vettori
-# Il check sull'userprofile controlla vi siano un minimo di N voti effettuati
-# NB Questa funzione necessita di essere chiamata dentro un "try:"
+# Restituisce il profilo più simile a user1, attraverso l'analisi
+# del suo vettore profilo.
+# Questa funzione necessita di essere chiamata dentro un "try:"
 def closestProfile(user1):
 	closest = {}
 	method = "userprofile"

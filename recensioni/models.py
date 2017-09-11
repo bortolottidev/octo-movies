@@ -5,6 +5,10 @@ from django.conf import settings
 from portal.utility import anonymous
 from LD_Proj.utility import objectExist
 
+# I primi voti rendono il rank troppo casuale, quindi preferisco mantenere il
+# valore iniziale "neutro" fino a n. 
+MIN_VOTE_REQUIRED = 2
+
 """ 
 Modello per la recensione.
 Partiamo dalla supposizione che, data la presenza dell'AutoField, di un film
@@ -42,15 +46,16 @@ class Recensione(models.Model):
 	def getRank (self):
 		return self.rank
 	
-	# Migliora aggiornando solo l'ultimo voto
+	"""
+	forzo aggiornamento del rank dopo ogni recensioni ma aggiorno 
+	controllando tutte: possibile miglioramento evitando questo calcolo.
+	"""
 	def __rankUpdate__(self):
 		if objectExist(self, "commento_set"):
 			voti_tot = self.commento_set.count()
 		else:
 			return
-		# I primi voti rendono il rank troppo casuale. In una situazione vera
-		# prenderei un numero più elevato.
-		if (voti_tot <= 2): 
+		if (voti_tot <= MIN_VOTE_REQUIRED): 
 			return 
 		voti_pos = 0
 		voti_neg = 0
@@ -59,19 +64,15 @@ class Recensione(models.Model):
 				voti_pos = voti_pos+1
 			elif commento.voto == False: # Commento negativi
 				voti_neg = voti_neg+1
-		# i voti sono pesati, non voglio influiscano ugualmente
+		# i voti sono pesati, un voto positivo influisce maggiormente rispetto
+		# ad un voto nullo o negativo
 		voti_null = (voti_tot - voti_neg - voti_pos)*0.5
 		voti_neg = voti_neg*0.5
 		# tolgo il "peso" di troppo - complementare a quanto sto usando
 		voti_tot = voti_tot - (voti_null*0.5) - (voti_neg*0.5)
 		ratio = (voti_null + voti_pos - voti_neg) / voti_tot
-		#print("voti null = "+str(voti_null))
-		#print("voti pos = "+str(voti_pos))
-		#print("voti neg = "+str(voti_neg))
-		#print("ratio = "+str(ratio))
 		try:
 			if (ratio < 0) or (ratio > 1):
-				#print("RATIO ERROR ON "+self+": "+str(ratio))
 				raise Exception(1234, "Ratio isn't a ratio!")
 			pass
 		except:
@@ -81,11 +82,13 @@ class Recensione(models.Model):
 			self.rank = ratio*100
 			return ;
 	
+	# Campi che vogliamo far visualizzare nell'interfaccia admin
 	def campi():
 		return ['titolo', 'testo', 'voto', 'genere',
 		  'autore', 'rank', ]
 	
-	def campi_segreti():
+	# Campi non modificabili
+	def __campiSegreti__():
 		return ['rank', ]
 	
 	def num_voti(self):
@@ -107,8 +110,7 @@ class Recensione(models.Model):
 			return [None]
 		return Recensione.objects.all()
 	
-# Modello per i commenti alla recensione (1:n rispetto ad essa)
-# Il voto alla recensione avviene attraverso il NullBooleanField che prevede
+# Il voto alla recensione avviene attraverso il NullBooleanField, che prevede
 # anche un eventuale voto Null ovvero neutrale.
 class Commento(models.Model):
 	recensione = models.ForeignKey(Recensione, on_delete=models.CASCADE,
@@ -118,18 +120,19 @@ class Commento(models.Model):
 	voto = models.NullBooleanField(default=0)
 	testo = models.TextField(max_length=150, blank=True)
 		
+	# Campi visualizzabili in interfaccia admin
 	def __campi__():
 		return ['recensione', 'autore', 'voto', 'testo']
+	# Campi non modificabili 
 	def __campisegreti__():
-		return ['recensione', ]
-	
+		return ['recensione', ]	
 	def __str__(self):
 		return self.testo
     
 """    
  Modello per i tag associati ad una recensione di un film
  Vogliamo che ogni tag sia unico, quindi la primary key sarà il tag stesso
- e non il solito AutoField.
+ e non il "classico" AutoField.
 """
 class Tag(models.Model):
     nome = models.CharField(max_length=25, primary_key=True)

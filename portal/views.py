@@ -7,19 +7,19 @@ from portal.models import UserProfile
 from portal.utility import anonymous
 from LD_Proj.settings import URL_FORM, HOME_URL
 
-url_contatti = URL_FORM
+HOME_REG_URL = 'portal/index.html'
 
 # View della pagina home degli utenti registrati
 @login_required
 def welcome(request):
 	context = {'request':request,'titolo':'Welcome!', 'homepage':'portal'}
-	return render(request,'portal/index.html', context)
+	return render(request, HOME_REG_URL, context)
 
 """
 View della pagina dei contatti
-Contiene i form necessari a contattare un admin.
+Elabora il form necessario a contattare un admin.
 Attualmente non è stato configurato del tutto, bisogna fare modifiche
-a settings per poter effettivamente inviare mail
+a settings per poter effettivamente inviare mail.
 """
 def contatti(request):
 	if request.method == 'POST': #invio
@@ -32,7 +32,9 @@ def contatti(request):
 			recipients = ['88744@studenti.unimore.it']
 			if invia_copia:
 				recipients.append(email)
-			# SEND MAIL DA CONFIGURARE
+			#	#	#	#	#	#	#	#
+			# SEND MAIL DA CONFIGURARE	#
+			#	#	#	#	#	#	#	#
 			messages.add_message(request, messages.INFO, 
 						'Grazie, la tua mail è stata inoltrata.')
 			return HttpResponseRedirect(HOME_URL)
@@ -43,4 +45,4 @@ def contatti(request):
 	else: # visualizzazione
 		form = ContactForm()
 		context = {'form':form, 'titolo':'Contatti'}
-		return render(request, url_contatti, context)
+		return render(request, URL_FORM, context)

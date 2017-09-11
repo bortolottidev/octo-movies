@@ -37,16 +37,12 @@ class UserProfile(Model):
 				found = False
 				found, voto = commentsAnalyzer(self, recensione, found)
 				if found :
-					#print("Appendo "+str(voto)+" in "+str(recensione))
 					vect.append(voto) # tengo conto solo dell'ultimo voto
 					count = count+1
 				else :
-					#print("Non trovato niente su "+str(recensione))
 					vect.append(0) # il nostro user non ha commentato
 		self.simVect = vect.__str__()
-		# Il profilo di un utente viene considerato valido se ha dato almeno n voti
+		# leggere sopra
 		if (count > VOTES_REQUIRED):
 			self.check = 1
-		
-		#print(str(self.simVect)+" di "+str(self.user))
 		return self.simVect

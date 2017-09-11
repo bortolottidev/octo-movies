@@ -6,10 +6,9 @@ officialGroup = "Recensori ufficiali"
 # La funzione analizza tutti i commenti di una data recensione, alla
 # ricerca di quelli lasciati dal nostro self.user
 def commentsAnalyzer(self, recensione, found):
-	# Se la recensione è scritta dal nostro user non ho bisogno di leggere commenti..
+	# Se la recensione è scritta dal nostro user è positiva
 	if recensione.autore.id == self.getUserId():
 		return True, 1
-	# Non ha votato conta come aver votato negativo o neutro
 	voto = 0
 	found = False
 	for commento in recensione.commento_set.all():
@@ -20,7 +19,6 @@ def commentsAnalyzer(self, recensione, found):
 			elif (commento.voto == False):
 				voto = 0
 			else: 
-				#print("Commento neutro su "+str(recensione))
 				voto = 0
 	return (found, voto)
 

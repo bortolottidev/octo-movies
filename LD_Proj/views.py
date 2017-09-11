@@ -7,7 +7,7 @@ from .settings import LOGIN_REDIRECT_URL, LOGOUT_REDIRECT_URL
 
 HOMEPAGE_URL = 'index.html'
 
-# Views homepage 
+# Views homepage utenti non registrati
 def home (request):
     # Utente registrato
     if request.user.is_authenticated():
