@@ -19,4 +19,4 @@ Se dovete ripristinare il database originale, per un qualsiasi motivo:
 1.	python manage.py loaddata db.json
 
 
-_Ulteriore documentazione presente in doc/progetto_LD.odt._
+_Screenshot e ulteriore documentazione di chiarimento presente in doc/progetto_LD.odt._
