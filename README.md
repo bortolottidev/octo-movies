@@ -18,5 +18,5 @@ I dati sono già pronti dopo il git pull/clone.
 Se dovete ripristinare il database originale, per un qualsiasi motivo:
 1.	python manage.py loaddata db.json
 
-
+Per accedere come "admin" o eventuali altri utenti la password è sempre "password1.".
 _Screenshot e ulteriore documentazione di chiarimento presente in doc/progetto_LD.odt._
