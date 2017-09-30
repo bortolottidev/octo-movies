@@ -34,7 +34,7 @@ class testRecensione(unittest.TestCase):
 			"rec non ha il metodo campi"
 		)
 		self.assertTrue(
-			callable(self.rec.campi_segreti),
+			callable(self.rec.__campiSegreti__),
 			"rec non ha il metodo campi_segreti"
 		)
 		self.assertTrue(

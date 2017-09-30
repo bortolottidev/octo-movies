@@ -5,7 +5,7 @@
 {% block bigtitle %}{% block title %} Indice {% endblock %}{% endblock %}
 
 {% block body_ext %}
-    <ul>
+	<ul>
         <li><a href="{% url 'recensioni:elenco' %}"> Tutte le recensioni </a></li>
         <li><a href="{% url 'home_reg:contatti' %}"> Contatti </a></li>
         <li><a href="{% url 'recensioni:ricerca' %}"> Ricerca </a></li>
@@ -23,5 +23,4 @@
     {% else %}
         Ancora nessuna recensione.. Diventa il primo recensore!
     {% endif %}
-    
 {% endblock %}

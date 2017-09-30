@@ -4,8 +4,10 @@
     {% comment %} Template di base, dal quale ereditano tutti. {% endcomment %}
 
     <head>
+		{% load staticfiles %}
         <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-        {% block head %}
+        <link rel="stylesheet" type="text/css" href="{% static 'portal/w3.css' %}" />
+		{% block head %}
             <title> 
                 MovieAdvisor | {% block title %}{% endblock %}
             </title>
