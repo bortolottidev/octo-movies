@@ -1,3 +1,5 @@
+from datetime import timedelta
+from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import User
 from LD_Proj import settings
@@ -21,7 +23,7 @@ corrispondono m film, e ad un film corrispono m tag.
 class Recensione(models.Model):
 	titolo = models.CharField(max_length=50)
 	autore = models.ForeignKey(settings.AUTH_USER_MODEL, 
-							on_delete=models.CASCADE, default=anonymous())
+							on_delete=models.CASCADE)#, default=anonymous())
 	testo = models.TextField()
 	voto = models.IntegerField()
 	genere = models.CharField(max_length=50, default='sconosciuto')
@@ -92,8 +94,17 @@ class Recensione(models.Model):
 		return ['rank', ]
 	
 	def num_voti(self):
-		return self.commento_set.count() 
-		
+		return self.commento_set.count()
+	
+	num_voti.short_description = "Numero di commenti ricevuto"
+	num_voti.admin_order_field = 'autore'
+	
+	def published_recently (self):
+		return self.pub_date >= timezone.now() - timedelta(days=7)
+	published_recently.admin_order_field = 'pub_date'
+	published_recently.boolean = True
+	published_recently.short_description = "Pubblicazione recente"
+	
 	def breve(self):
 		testo_breve = self.testo[0:250]
 		prime_righe = testo_breve.split('.')
@@ -113,10 +124,10 @@ class Recensione(models.Model):
 # Il voto alla recensione avviene attraverso il NullBooleanField, che prevede
 # anche un eventuale voto Null ovvero neutrale.
 class Commento(models.Model):
-	recensione = models.ForeignKey(Recensione, on_delete=models.CASCADE,
-								default=Recensione.__allRec__()[0])
+	recensione = models.ForeignKey(Recensione, on_delete=models.CASCADE)
+								#default=Recensione.__allRec__()[0])
 	autore = models.ForeignKey(settings.AUTH_USER_MODEL, 
-							on_delete=models.CASCADE, default=anonymous())
+							on_delete=models.CASCADE)#, default=anonymous())
 	voto = models.NullBooleanField(default=0)
 	testo = models.TextField(max_length=150, blank=True)
 		

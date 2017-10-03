@@ -1,5 +1,6 @@
 from django.contrib.auth.models import Group
 from . import models
+from LD_Proj.utility import errore
 
 officialGroup = "Recensori ufficiali"
 
@@ -25,9 +26,15 @@ def commentsAnalyzer(self, recensione, found):
 # Funzione che restituisce le ultime cinque recensioni pubblicate ufficialmente
 # (scritte da recensori appartenenti al gruppo dei recensori ufficiali) 
 def latestOfficial():
-	officialRec = []
-	officialUser = Group.objects.get(name=officialGroup).user_set.all()
-	for rec in models.Recensione.objects.order_by('-pub_date'):
-		if rec.autore in officialUser:
-			officialRec.append(rec)
-	return officialRec[:5]
+	try:
+		group = Group.objects.get(name=officialGroup)
+		member = group.user_set.all()
+	except:
+		errore("Errore in: latestOfficial()")
+		return []
+	else:
+		officialRec = []
+		for rec in models.Recensione.objects.order_by('-pub_date'):
+			if rec.autore in member:
+				officialRec.append(rec)
+		return officialRec[:5]

@@ -13,3 +13,6 @@ def objectExist(istance, methodStr):
 	except:
 		return False
 	return True
+
+def errore (str_errore):
+	print(str_errore)

@@ -18,6 +18,10 @@ class RecensioneAdmin(admin.ModelAdmin):
 		('Info aggiuntive',	{'fields': ['genere'], 'classes': ['collapse']})
    ]
 	inlines = [CommentoInline, TagRecensioneInline]
+	list_display = ('titolo', 'autore', 'pub_date', 'published_recently', 
+				 'num_voti')
+	list_filter =  ['pub_date']
+	search_fields = ['titolo']
 	
 class CommentoAdmin(admin.ModelAdmin):
 	fields = ['recensione', 'autore', 'voto', 'testo']
