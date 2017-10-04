@@ -1,8 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
-from LD_Proj import settings
+from django.shortcuts import get_list_or_404
 from django.conf import settings
+
 from portal.utility import anonymous
+from LD_Proj import settings
 from LD_Proj.utility import objectExist
 
 # I primi voti rendono il rank troppo casuale, quindi preferisco mantenere il
@@ -106,9 +108,8 @@ class Recensione(models.Model):
 		return self.autore
 	
 	def __allRec__():
-		if not Recensione.objects.all() :
-			return [None]
-		return Recensione.objects.all()
+		lista = get_list_or_404(Recensione)
+		return lista
 	
 # Il voto alla recensione avviene attraverso il NullBooleanField, che prevede
 # anche un eventuale voto Null ovvero neutrale.
