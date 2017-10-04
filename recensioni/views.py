@@ -28,7 +28,7 @@ def list_render (request, lista, context):
 
 # View dell'elenco completo delle recensioni
 def elenco (request):
-	lista = Recensione.objects.order_by('-pub_date')
+	lista = Recensione.__allRec__()
 	context = {'titolo':'Elenco completo'}
 	return list_render (request, lista, context) 
 

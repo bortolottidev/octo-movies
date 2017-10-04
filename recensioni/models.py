@@ -4,7 +4,6 @@ from django.shortcuts import get_list_or_404
 from django.conf import settings
 
 from portal.utility import anonymous
-from LD_Proj import settings
 from LD_Proj.utility import objectExist
 
 # I primi voti rendono il rank troppo casuale, quindi preferisco mantenere il
@@ -107,8 +106,9 @@ class Recensione(models.Model):
 	def getAutore(self):
 		return self.autore
 	
+	# NB Ritorna una lista, non un queryset!
 	def __allRec__():
-		lista = get_list_or_404(Recensione)
+		lista = get_list_or_404(Recensione.objects.order_by('-pub_date'))
 		return lista
 	
 # Il voto alla recensione avviene attraverso il NullBooleanField, che prevede
