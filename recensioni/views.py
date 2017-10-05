@@ -33,12 +33,22 @@ def elenco (request):
 	return list_render (request, lista, context) 
 
 
-# View dettagli della singola recensione
-def detail (request, rec_id):
-    recensione = get_object_or_404(Recensione, pk=rec_id)
-    titolo = "Recensione "+rec_id
-    context = {'recensione':recensione, 'titolo':titolo}
-    return render(request, url_detail, context)
+## View dettagli della singola recensione
+#def detail (request, rec_id):
+    #recensione = get_object_or_404(Recensione, pk=rec_id)
+    #titolo = "Recensione "+rec_id
+    #context = {'recensione':recensione, 'titolo':titolo}
+    #return render(request, url_detail, context)
+
+# View dettaglio semplificata by DetailView
+class DetailView (generic.DetailView):
+	model = Recensione
+	
+	def get_context_data(self, **kwargs):
+		context = super(DetailView, self).get_context_data(**kwargs)
+		titolo = "Recensione " + str(self.object.pk)
+		context['titolo'] = titolo
+		return context
 
 # View della pagina di ricerca
 def ricerca (request):
