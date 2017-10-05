@@ -28,8 +28,15 @@
 		</a>
 		{% for commento in recensione.commento_set.all %}
 			<hr>
-			<h4> {{commento.autore}} - {{commento.voto}} </h4>
-			{{commento.testo}}
+			<h4> 
+				{{commento.autore}} : 
+				{% if commento.voto %}
+					Like
+				{% else %}
+					Dislike
+				{% endif %}
+			</h4>
+			{% if commento.testo %} {{commento.testo}} {% endif %}
 		{% endfor %}
 	{% else %}
 		<h5> Nessun commento da visualizzare. 

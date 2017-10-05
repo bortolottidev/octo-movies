@@ -2,25 +2,41 @@
 
 {% comment  %} Pagina principale, utente guest. {% endcomment %}
 
-{% block bigtitle %}{% block title %} Indice {% endblock %}{% endblock %}
+{% block title %} Indice {% endblock %}
 
-{% block body_ext %}
-	<ul>
-        <li><a href="{% url 'recensioni:elenco' %}"> Tutte le recensioni </a></li>
-        <li><a href="{% url 'home_reg:contatti' %}"> Contatti </a></li>
-        <li><a href="{% url 'recensioni:ricerca' %}"> Ricerca </a></li>
-    </ul>
+{% block main %}
+	{% if recensioni %}
+		<h2> Ultime Recensioni: </h2>
+		{% for rec in recensioni %}
+			<div class="w3-row">
+				<div class="w3-twothird w3-container">
+					<h1 class="w3-text-teal"> {{rec.titolo }} </h1>
+					<p> {{rec.breve }} </p>
+					<a href="{% url 'recensioni:dettaglio' rec.id %}"> 
+						Leggi di più.. 
+					</a>
+				</div>
+				<div class="w3-third w3-container">
+					<p class="w3-border w3-padding-large w3-padding-32 w3-center">AD</p>
+					<p class="w3-border w3-padding-large w3-padding-64 w3-center">AD</p>
+				</div>
+			
+			</div>
+		{% endfor %}
+	{% else %}
+		Ancora nessuna recensione.. Diventa il primo recensore!
+	{% endif %}
 
-    {% if recensioni %}
-        <h2> Ultime Recensioni: </h2>
-        {% for rec in recensioni %}
-            <h3> {{rec.titolo }} </h3>
-            {{rec.breve }} 
-            <a href="{% url 'recensioni:dettaglio' rec.id %}"> 
-				Leggi di più.. 
-			</a>
-        {% endfor %}
-    {% else %}
-        Ancora nessuna recensione.. Diventa il primo recensore!
-    {% endif %}
+	<!-- Pagination -->
+	<div class="w3-center w3-padding-32">
+		<div class="w3-bar">
+			<a class="w3-button w3-black" href="#">1</a>
+			<a class="w3-button w3-hover-black" href="#">2</a>
+			<a class="w3-button w3-hover-black" href="#">3</a>
+			<a class="w3-button w3-hover-black" href="#">4</a>
+			<a class="w3-button w3-hover-black" href="#">5</a>
+			<a class="w3-button w3-hover-black" href="#">»</a>
+		</div>
+	</div>
+    
 {% endblock %}
