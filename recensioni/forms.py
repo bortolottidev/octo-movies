@@ -12,6 +12,8 @@ class ResearchForm(forms.Form):
 
 # Form per inserimento recensioni
 class ReviewForm(forms.ModelForm) :
+	anonymous = forms.BooleanField( label = 'Pubblica come anonimo',
+		required=False )
 	class Meta:
 		model = Recensione
 		fields = Recensione.campi()

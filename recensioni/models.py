@@ -89,7 +89,7 @@ class Recensione(models.Model):
 	
 	# Campi non modificabili
 	def __campiSegreti__():
-		return ['rank', ]
+		return ['rank', 'autore', ]
 	
 	def num_voti(self):
 		return self.commento_set.count() 

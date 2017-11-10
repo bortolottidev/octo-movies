@@ -2,11 +2,11 @@
 
 {% comment  %} Pagina principale, utente guest. {% endcomment %}
 
-{% block title %} Indice {% endblock %}
+{% block bigtitle %}{% block title %} Indice {% endblock %}{% endblock %}
 
 {% block main %}
 	{% if recensioni %}
-		<h2> Ultime Recensioni: </h2>
+		<h2 class="w3-center"> Ultime Recensioni </h2>
 		{% for rec in recensioni %}
 			<div class="w3-row">
 				<div class="w3-twothird w3-container">
@@ -16,9 +16,8 @@
 						Leggi di più.. 
 					</a>
 				</div>
-				<div class="w3-third w3-container">
-					<p class="w3-border w3-padding-large w3-padding-32 w3-center">AD</p>
-					<p class="w3-border w3-padding-large w3-padding-64 w3-center">AD</p>
+				<div class="w3-third w3-container ">
+					<p class="w3-border w3-padding-large w3-padding-64 w3-center w3-red"> (image of "{{rec.titolo}}") </p>
 				</div>
 			
 			</div>
@@ -28,7 +27,7 @@
 	{% endif %}
 
 	<!-- Pagination -->
-	<div class="w3-center w3-padding-32">
+	<!-- <div class="w3-center w3-padding-32">
 		<div class="w3-bar">
 			<a class="w3-button w3-black" href="#">1</a>
 			<a class="w3-button w3-hover-black" href="#">2</a>
@@ -37,6 +36,6 @@
 			<a class="w3-button w3-hover-black" href="#">5</a>
 			<a class="w3-button w3-hover-black" href="#">»</a>
 		</div>
-	</div>
+	</div> -->
     
 {% endblock %}

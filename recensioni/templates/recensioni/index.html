@@ -4,9 +4,33 @@
 
 {% block bigtitle %}{% block title %} {{titolo}} {% endblock %}{% endblock %}
 
-{% block body_ext %}
+{% block main %}
+
+	{% if recensioni  %} 
+		<div class="w3-cell-row">
+		{% for recensione in recensioni %}
+			<div class="w3-container w3-border-right w3-border-bottom w3-third w3-cell">
+				<p> 
+					<span class="w3-badge w3-grey w3-tiny w3-padding">{{forloop.counter}}</span>
+					<a href="{% url 'recensioni:dettaglio' recensione.id %}">
+                        {{recensione.titolo}} 
+                    </a>
+                    {% if voti_on %} 
+						-- {{ recensione.num_voti }} 
+						comment{{ recensione.num_voti|pluralize }} --
+						{{ recensione.getRank|truncatechars:7 }} % apprezzamento
+                    {% endif %} 
+				</p>
+			</div>
+		{% endfor %}
+		</div> 
+	{% else %}
+        <p> Non ci sono recensioni. </p>
+    {% endif %}
+	
+	<!--
     {% if recensioni  %}
-        <ul>
+        <ul class="w3-ul">
             {% for recensione in recensioni %}
                 <li>
                     <a href="{% url 'recensioni:dettaglio' recensione.id %}">
@@ -22,7 +46,8 @@
     {% else %}
         <p> Non ci sono recensioni. </p>
     {% endif %}
-    
+	-->
+	
     {% if suggerimenti  %}
 		{% if lista_sugg %}
 			<h3> Potrebbe interessarti anche.. </h3>
@@ -40,4 +65,4 @@
 		{% endif %}
 	{% endif %}
     
-{% endblock %}
+{% endblock main %}

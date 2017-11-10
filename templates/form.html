@@ -2,15 +2,19 @@
 
 {% comment  %} Pagina visualizzazione form. {% endcomment %}
 
-{% block bigtitle %}{% block title %} {{titolo}} {% endblock %}{% endblock %}
+{% block bigtitle %}{% block title %} {{titolo | default:"404 - titolo"}} {% endblock %}{% endblock %}
 
-{% block body_ext %}
+{% block main %}
 
-	<form method="POST"> 
+	<form class="w3-container" method="POST"> 
 		{% csrf_token %}
 		{{form.as_p}}
-		<input type="submit" value="Invia!"> 
-		<button onclick="goHome()"> Back.. </button>
+		<p> 
+			<input type="submit" class="w3-btn w3-hover-grey w3-red w3-round" 
+				value="Invia!" /> 
+			<button class="w3-btn w3-hover-grey w3-black w3-round" 
+				onclick="goHome()"> Back.. </button> 
+		</p>
 		{% if next %}
 			<input type="hidden" name="next" value="{{ next }}" />
 		{% else %}
