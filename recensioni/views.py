@@ -26,6 +26,7 @@ def list_render (request, lista, context):
 		context = {'recensioni':lista, 'request':request}
 	return render(request, url_index, context)
 
+<<<<<<< HEAD
 # View dell'elenco delle recensioni
 def elenco (request, filterStr):
 	if filterStr == '':
@@ -40,16 +41,31 @@ def elenco (request, filterStr):
 		lista = Recensione.objects.filter(genere=filterStr)
 	else:
 		lista = Recensione.objects.filter(titolo__startswith=filterStr)
+=======
+# View dell'elenco completo delle recensioni
+def elenco (request):
+	lista = Recensione.__allRec__()
+>>>>>>> master
 	context = {'titolo':'Elenco completo'}
 	return list_render (request, lista, context) 
 
 
-# View dettagli della singola recensione
-def detail (request, rec_id):
-    recensione = get_object_or_404(Recensione, pk=rec_id)
-    titolo = "Recensione "+rec_id
-    context = {'recensione':recensione, 'titolo':titolo}
-    return render(request, url_detail, context)
+## View dettagli della singola recensione
+#def detail (request, rec_id):
+    #recensione = get_object_or_404(Recensione, pk=rec_id)
+    #titolo = "Recensione "+rec_id
+    #context = {'recensione':recensione, 'titolo':titolo}
+    #return render(request, url_detail, context)
+
+# View dettaglio semplificata by DetailView
+class DetailView (generic.DetailView):
+	model = Recensione
+	
+	def get_context_data(self, **kwargs):
+		context = super(DetailView, self).get_context_data(**kwargs)
+		titolo = "Recensione " + str(self.object.pk)
+		context['titolo'] = titolo
+		return context
 
 # View della pagina di ricerca
 def ricerca (request):

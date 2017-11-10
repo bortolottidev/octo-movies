@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
-from LD_Proj import settings
+from django.shortcuts import get_list_or_404
 from django.conf import settings
+
 from portal.utility import anonymous
 from LD_Proj.utility import objectExist
 
@@ -105,10 +106,10 @@ class Recensione(models.Model):
 	def getAutore(self):
 		return self.autore
 	
+	# NB Ritorna una lista, non un queryset!
 	def __allRec__():
-		if not Recensione.objects.all() :
-			return [None]
-		return Recensione.objects.all()
+		lista = get_list_or_404(Recensione.objects.order_by('-pub_date'))
+		return lista
 	
 # Il voto alla recensione avviene attraverso il NullBooleanField, che prevede
 # anche un eventuale voto Null ovvero neutrale.
