@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% comment  %} Pagina visualizzazione dettagli delle recensioni 
+
+ATTUALMENTE NON USATA
+
+{% block title %} {{titolo}} {% endblock %}
+{% block bigtitle %}{% endblock %}
+
+{% block main %}
+	<h1> {{titolo}} - {{ recensione.titolo }}</h1>
+	<h3> Genere: {{recensione.genere}} </h3>
+	{{ recensione.testo }}
+	<h4> (Voto: {{recensione.voto}}) </h4>
+	<h5> Recensione di {{recensione.autore}}, {{recensione.pub_date}} </h5> 
+	
+	{% if recensione.tag_set.all %}
+		<h3> Tag </h3>
+	{% endif %}
+	{% for tag in recensione.tag_set.all %}
+		#{{tag}}
+	{% endfor %}
+	
+	{% if recensione.commento_set.all %}
+		<h2> Commenti </h2>
+		Ti è piaciuta questa recensione? Non ti trovi d'accordo con 
+		il punto di vista di <i>{{recensione.autore}}</i>?
+		<a href="{% url 'recensioni:comment' recensione.id%}"> 
+			Scrivi un commento! 
+		</a>
+		{% for commento in recensione.commento_set.all %}
+			<hr>
+			<h4> 
+				{{commento.autore}} : 
+				{% if commento.voto %}
+					Like
+				{% else %}
+					Dislike
+				{% endif %}
+			</h4>
+			{% if commento.testo %} {{commento.testo}} {% endif %}
+		{% endfor %}
+	{% else %}
+		<h5> Nessun commento da visualizzare. 
+		<a href="{% url 'recensioni:comment' recensione.id%}">Scrivi</a>
+		tu il primo! </h5>
+	{% endif %}
+{% endblock %}
+
+{% endcomment %}

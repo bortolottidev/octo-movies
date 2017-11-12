@@ -10,12 +10,15 @@
 		<div class="w3-cell-row">
 		{% for recensione in recensioni %}
 			<div class="w3-container w3-border-right w3-border-bottom w3-third w3-cell">
-				<p> 
-					<span class="w3-badge w3-grey w3-tiny w3-padding">{{forloop.counter}}</span>
-					<a href="{% url 'recensioni:dettaglio' recensione.id %}">
-                        {{recensione.titolo}} 
-                    </a>
-                    {% if voti_on %} 
+				<p>  
+					<a href="{% url 'recensioni:dettaglio' recensione.id %}" 
+						class="w3-button w3-circle w3-light-grey w3-ripple w3-tiny">
+						{{forloop.counter}} 
+					</a>
+                    {{recensione.titolo}} 
+                    {% if clicks_on %}
+                    	-- {{ recensione.nclicks }} click{{ recensione.nclicks|pluralize }}!
+                    {% elif voti_on %} 
 						-- {{ recensione.num_voti }} 
 						comment{{ recensione.num_voti|pluralize }} --
 						{{ recensione.getRank|truncatechars:7 }} % apprezzamento
@@ -28,30 +31,10 @@
         <p> Non ci sono recensioni. </p>
     {% endif %}
 	
-	<!--
-    {% if recensioni  %}
-        <ul class="w3-ul">
-            {% for recensione in recensioni %}
-                <li>
-                    <a href="{% url 'recensioni:dettaglio' recensione.id %}">
-                        {{recensione.titolo}} 
-                    </a>
-                    {% if voti_on %} -- {{ recensione.num_voti }} 
-						comment{{ recensione.num_voti|pluralize }} --
-						{{ recensione.getRank|truncatechars:7 }} % apprezzamento
-                    {% endif %}
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p> Non ci sono recensioni. </p>
-    {% endif %}
-	-->
-	
-    {% if suggerimenti  %}
+	{% if suggerimenti  %}
 		{% if lista_sugg %}
 			<h3> Potrebbe interessarti anche.. </h3>
-			<ul>
+			<ul class="w3-ul w3-border">
 				{% for recensione in lista_sugg %}
 					<li>
 						<a href="{% url 'recensioni:dettaglio' recensione.id %}">

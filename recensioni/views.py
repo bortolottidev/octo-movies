@@ -26,36 +26,25 @@ def list_render (request, lista, context):
 		context = {'recensioni':lista, 'request':request}
 	return render(request, url_index, context)
 
-<<<<<<< HEAD
+
 # View dell'elenco delle recensioni
 def elenco (request, filterStr):
+	context = {}
 	if filterStr == '':
 		lista = Recensione.objects.order_by('-pub_date')
 	elif filterStr.startswith("BEST"):
 		year = filterStr[-4:]
-		lista = Recensione.objects.filter(pub_date__year=year)
-
-		## OK, ho quelle di quell'anno.. ma come ottenere il bestof? ##
-
+		# Prendo i primi 9 più cliccati di quell'anno
+		# 9 perchè impaginate meglio
+		lista = Recensione.objects.filter(pub_date__year=year) \
+			.exclude(nclicks=0).order_by('-nclicks')[:9]
+		context['clicks_on'] = 1
 	elif filterStr == 'Commedia' or filterStr == 'Azione':
 		lista = Recensione.objects.filter(genere=filterStr)
 	else:
 		lista = Recensione.objects.filter(titolo__startswith=filterStr)
-=======
-# View dell'elenco completo delle recensioni
-def elenco (request):
-	lista = Recensione.__allRec__()
->>>>>>> master
-	context = {'titolo':'Elenco completo'}
+	context['titolo'] = 'Elenco recensioni'
 	return list_render (request, lista, context) 
-
-
-## View dettagli della singola recensione
-#def detail (request, rec_id):
-    #recensione = get_object_or_404(Recensione, pk=rec_id)
-    #titolo = "Recensione "+rec_id
-    #context = {'recensione':recensione, 'titolo':titolo}
-    #return render(request, url_detail, context)
 
 # View dettaglio semplificata by DetailView
 class DetailView (generic.DetailView):
@@ -63,7 +52,10 @@ class DetailView (generic.DetailView):
 	
 	def get_context_data(self, **kwargs):
 		context = super(DetailView, self).get_context_data(**kwargs)
+		# Aumento contatore views
+		self.object.counterClicksUp()
 		titolo = "Recensione " + str(self.object.pk)
+		#print("La tua recensione "+titolo+" ha ricevuto "+str(self.object.nclicks)+" clicks")
 		context['titolo'] = titolo
 		return context
 

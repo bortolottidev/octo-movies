@@ -28,6 +28,7 @@ class Recensione(models.Model):
 	genere = models.CharField(max_length=50, default='sconosciuto')
 	pub_date = models.DateTimeField('date_published', auto_now_add=True)
 	rank = models.IntegerField(default=50)
+	nclicks = models.IntegerField(default=0)
 	
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
@@ -83,10 +84,15 @@ class Recensione(models.Model):
 			self.rank = ratio*100
 			return ;
 	
+	# Aumenta il counter del numero di visite alla recensione
+	def counterClicksUp(self):
+		self.nclicks = self.nclicks + 1
+		self.save()
+
 	# Campi che vogliamo far visualizzare nell'interfaccia admin
 	def campi():
 		return ['titolo', 'testo', 'voto', 'genere',
-		  'autore', 'rank', ]
+		  'autore', 'rank', 'nclicks' ]
 	
 	# Campi non modificabili
 	def __campiSegreti__():
@@ -114,8 +120,9 @@ class Recensione(models.Model):
 # Il voto alla recensione avviene attraverso il NullBooleanField, che prevede
 # anche un eventuale voto Null ovvero neutrale.
 class Commento(models.Model):
+	# Default .id per evitare problemi di serializzazione
 	recensione = models.ForeignKey(Recensione, on_delete=models.CASCADE,
-								default=Recensione.__allRec__()[0])
+								default=Recensione.__allRec__()[0].id)
 	autore = models.ForeignKey(settings.AUTH_USER_MODEL, 
 							on_delete=models.CASCADE, default=anonymous())
 	voto = models.NullBooleanField(default=0)
