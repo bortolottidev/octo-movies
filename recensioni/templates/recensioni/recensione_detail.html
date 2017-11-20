@@ -1,11 +1,14 @@
 {% extends "base.html" %}
 
-{% comment  %} Pagina visualizzazione dettagli delle recensioni {% endcomment %}
+{% load staticfiles %}
 
-{% block title %} {{titolo}} {% endblock %}
+{% comment  %} Pagina visualizzazione dettagli delle recensioni {% endcomment %}
+{% block bigtitle %}{% block title %} 
+	{{recensione.titolo}} 
+{% endblock %} {% endblock %}
 
 {% block main %}
-	<h1> {{titolo}} - {{ recensione.titolo }}</h1>
+	{# <h1> {{titolo}} - {{ recensione.titolo }}</h1> #}
 	<h3> Genere: {{recensione.genere}} </h3>
 	{{ recensione.testo }}
 	<h4> (Voto: {{recensione.voto}}) </h4>
@@ -26,20 +29,26 @@
 			Scrivi un commento! 
 		</a>
 		{% for commento in recensione.commento_set.all %}
-			<hr>
-			<h4> 
-				{{commento.autore}} : 
-				{% if commento.voto %}
-					Like
-				{% else %}
-					Dislike
-				{% endif %}
-			</h4>
-			{% if commento.testo %} {{commento.testo}} {% endif %}
+			<p class="w3-border-bottom">
+				<h4> 
+					{{commento.autore}} : 
+					{% if commento.voto %}
+						<img alt="[LikeIMG]" height="30"
+							src="{% static 'recensioni/img/like.png' %}" />
+						{#<img alt="wtf" src="/static/recensioni/img/like.png" /> #}
+					{% else %}
+						<img alt="[DisLikeIMG]" height="30"
+							src="{% static 'recensioni/img/dislike.png' %}" />
+					{% endif %}
+				</h4>
+				{% if commento.testo %} {{commento.testo}} {% endif %}
+			</p>
 		{% endfor %}
 	{% else %}
-		<h5> Nessun commento da visualizzare. 
-		<a href="{% url 'recensioni:comment' recensione.id%}">Scrivi</a>
-		tu il primo! </h5>
+		<div class="w3-panel w3-pale-yellow w3-border w3-border-yellow">
+			<h5> Nessun commento da visualizzare. 
+			<a href="{% url 'recensioni:comment' recensione.id%}">Scrivi</a>
+			tu il primo! </h5>
+		</div>
 	{% endif %}
 {% endblock %}
