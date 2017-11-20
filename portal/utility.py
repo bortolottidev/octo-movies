@@ -15,8 +15,7 @@ THRESHOLD = 0.15
 officialGroup = 'Recensori ufficiali'
 
 # Check di controllo su myUser. Fa parte del gruppo recensori pro?
-def isOfficial (myUser):
-	
+def isOfficial (myUser):	
 	group = Group.objects.filter(name=officialGroup)
 	for user in group:
 		if user == myUser:

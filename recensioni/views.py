@@ -26,19 +26,38 @@ def list_render (request, lista, context):
 		context = {'recensioni':lista, 'request':request}
 	return render(request, url_index, context)
 
-# View dell'elenco completo delle recensioni
-def elenco (request):
-	lista = Recensione.objects.order_by('-pub_date')
-	context = {'titolo':'Elenco completo'}
+
+# View dell'elenco delle recensioni
+def elenco (request, filterStr):
+	context = {}
+	if filterStr == '':
+		lista = Recensione.objects.order_by('-pub_date')
+	elif filterStr.startswith("BEST"):
+		year = filterStr[-4:]
+		# Prendo i primi 9 più cliccati di quell'anno
+		# 9 perchè impaginate meglio
+		lista = Recensione.objects.filter(pub_date__year=year) \
+			.exclude(nclicks=0).order_by('-nclicks')[:9]
+		context['clicks_on'] = 1
+	elif filterStr == 'Commedia' or filterStr == 'Azione':
+		lista = Recensione.objects.filter(genere=filterStr)
+	else:
+		lista = Recensione.objects.filter(titolo__startswith=filterStr)
+	context['titolo'] = 'Elenco recensioni'
 	return list_render (request, lista, context) 
 
-
-# View dettagli della singola recensione
-def detail (request, rec_id):
-    recensione = get_object_or_404(Recensione, pk=rec_id)
-    titolo = "Recensione "+rec_id
-    context = {'recensione':recensione, 'titolo':titolo}
-    return render(request, url_detail, context)
+# View dettaglio semplificata by DetailView
+class DetailView (generic.DetailView):
+	model = Recensione
+	
+	def get_context_data(self, **kwargs):
+		context = super(DetailView, self).get_context_data(**kwargs)
+		# Aumento contatore views
+		self.object.counterClicksUp()
+		titolo = "Recensione " + str(self.object.pk)
+		#print("La tua recensione "+titolo+" ha ricevuto "+str(self.object.nclicks)+" clicks")
+		context['titolo'] = titolo
+		return context
 
 # View della pagina di ricerca
 def ricerca (request):
@@ -119,16 +138,18 @@ def insert_review (request):
 		form = ReviewForm(request.POST)
 		recensione = form.save(commit=False)
 		recensione.rank = 50
-		if (recensione.autore != anonymous()) :
-			recensione.autore = request.user
-			if isOfficial(request.user):
-				recensione.rank = 80
 		if form.is_valid():
+			anonRequested = form.cleaned_data['anonymous']
+			# Default autore anonimo, aggiorno se non richiesto quindi
+			if not anonRequested :
+				recensione.autore = request.user
+				if isOfficial(request.user):
+					recensione.rank = 80
 			recensione.save()
 			form.save_m2m()
 			messages.add_message(request, messages.INFO, 
 						'Ottimo, la tua recensione è stata inserita!')
-			return HttpResponseRedirect(reverse('recensioni:elenco'))
+			return HttpResponseRedirect(reverse('recensioni:elenco', kwargs={'filterStr':''}))
 		else:
 			messages.add_message(request, messages.INFO, 
 						'Errore: Hai inserito un tipo di dato non valido.')

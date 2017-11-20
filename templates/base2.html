@@ -1,0 +1,30 @@
+{% comment %} ATTUALMENTE NON USATA
+
+
+<!DOCTYPE html>
+<html>
+
+    
+
+	<body >
+		
+		<div class="w3-row">
+			<div class="w3-col w3-left w3-container" style="width:15%"></div>
+			<div class="w3-col w3-right w3-container" style="width:15%"></div>
+			<div class="w3-rest">
+				{% block body %}            
+					<header>
+						
+						<h2> {% block bigtitle %}{% endblock %}</h2>
+					</header>
+					{% block body_ext %}{% endblock %}
+				{% endblock %}
+			</div>
+        </div>
+        
+    </body>
+    
+
+</html>
+
+{% endcomment %}

@@ -2,27 +2,33 @@
 
 {% comment %} Template homepage utenti registrati. {% endcomment %}
 
-{% block head %}
-	{% load staticfiles %}
-	<link rel="stylesheet" type="text/css" href="{% static 'portal/style.css' %}" />
-    <title> MovieAdvisor | {% block title %}{% endblock %}</title>
-{% endblock %}
+{% comment %}
+    {% block head %}
+    	{% load staticfiles %}
+    	<link rel="stylesheet" type="text/css" href="{% static 'portal/style.css' %}" />
+        <title> MovieAdvisor | {% block title %}{% endblock %}</title>
+    {% endblock %}
+{% endcomment %}
 
-{% block body %}
-    <header>
-        <h1>MovieAdvisor | Web Portal</h1>
-    </header>
-    <section>
-        <ul>
-            <li><a href="{% url 'home' %}">Main Page</a></li>
-            <li><a href="{% url 'recensioni:elenco' %}"> Tutte le recensioni </a></li>
-			<li><a href="{% url 'home_reg:contatti' %}"> Contatti </a></li>
-			<li><a href="{% url 'recensioni:ricerca' %}"> Ricerca </a></li>
-            <li><a href="{% url 'recensioni:top100' %}"> Top100 recensioni </a></li>
-            <li><a href="{% url 'recensioni:nuovarec' %}"> Scrivi nuova recensione </a></li>
-            <li><a href="{% url 'logout_view' %}">Logout</a></li>
-        </ul>
-    </section>
+{% block bigtitle %} User Web Portal {% endblock %}
+
+{% block main %}
+    <div class="w3-row">
+        <div class="w3-container w3-col" style="width:20%"></div>
+        <a class="w3-button w3-grey w3-col w3-margin w3-xlarge" style="width:30%" href="{% url 'home' %}">Main Page</a>
+        <a class="w3-button w3-grey w3-col w3-margin w3-xlarge" style="width:30%" href="{% url 'recensioni:elenco' '' %}"> Tutte le recensioni </a>
+    </div>
+	<div class="w3-row">
+        <div class="w3-container w3-col" style="width:20%"></div>
+        <a class="w3-button w3-grey w3-col w3-margin w3-xlarge" style="width:30%" href="{% url 'home_reg:contatti' %}"> Contatti </a>
+	    <a class="w3-button w3-grey w3-col w3-margin w3-xlarge" style="width:30%" href="{% url 'recensioni:ricerca' %}"> Ricerca </a>
+    </div>
+    <div class="w3-row">
+        <div class="w3-container w3-col" style="width:20%"></div>
+        <a class="w3-button w3-grey w3-col w3-margin w3-xlarge" style="width:30%" href="{% url 'recensioni:top100' %}"> Top100 recensioni </a>
+        <a class="w3-button w3-grey w3-col w3-margin w3-xlarge" style="width:30%" href="{% url 'recensioni:nuovarec' %}"> Scrivi nuova recensione </a>
+    </div> 
+    {# logout spostato su colonna #}
     
     {% block content %}
     {% endblock %}

@@ -1,14 +1,12 @@
+{% comment %} ATTUALMENTE NON USATA
+
 {% extends "base.html" %}
 
 {% comment %}   Pagina per autenticare gli utenti. {% endcomment %}
 
-{% block head %} <title>MovieAdvisor | Login</title> {% endblock %}
+{% block bigtitle %}{% block title %} Login {% endblock %}{% endblock %}
 
-{% block body %}
-	<header>
-		<h1>Movieadvisor</h1>
-		<h2>Login Page</h2>
-	</header>
+{% block main %}
 	<section>
 		{% if form.errors %}
 		<p>Errore. Il tuo username e/o la tua password sono sbagliati.</p>
@@ -38,3 +36,5 @@
 		}
 	</script>
 {% endblock %}
+
+{% endcomment %}

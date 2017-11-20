@@ -1,69 +1,187 @@
 <!DOCTYPE html>
-<html>
+<html style="">
+{% comment %} Template di base, dal quale ereditano tutti. {% endcomment %}
 
-    {% comment %} Template di base, dal quale ereditano tutti. {% endcomment %}
+<head>
+	{% load staticfiles %}
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="{% static 'portal/w3.css' %}" />
+	{% block head %}
+		<title> 
+			MovieAdvisor | {% block title %} titolo non definito {% endblock title %}
+		</title>
+	{% endblock %}
+</head>
 
-    <head>
-        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-        {% block head %}
-            <title> 
-                MovieAdvisor | {% block title %}{% endblock %}
-            </title>
-        {% endblock %}
-    </head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-	<body onload="whatTimeIs()">
-	    {% block body %}            
-			<header>
-                <h1> MovieAdvisor </h1>
-                <div align="right" id="timeTxt">  </div>
-                <div align="right">
-					{% if not request.user.is_authenticated %}
-						<a href="{% url 'home_reg:welcome' %}"> Login </a> | Iscrizione
-					{% endif %}
-				</div>
-                <h2> {% block bigtitle %}{% endblock %}</h2>
-            </header>
-            {% block body_ext %}{% endblock %}
-        {% endblock %}
-        
-        {% for message in messages %}
-			<script>alert("{{ message }}")</script>
-		{% endfor %}
-    </body>
-    <footer>
-        <hr>
-        <span>&copy; 2016, Django</span> 
-        {% if homepage %}
-			<a href="{% url 'admin:index' %}"> Accesso admin </a>
-        {% else %}
+<style>
+	html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
+	.w3-sidebar {
+		z-index: 3;
+		width: 250px;
+		top: 43px;
+		bottom: 0;
+		height: inherit;
+	}
+</style>
+
+<body onload="startTime()" style="">
+
+	{% block navbar %}
+	<div class="w3-top">
+		<div class="w3-bar w3-theme w3-top w3-left-align w3-large">
+			<a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" 
+				href="javascript:void(0)" onclick="w3_open()"> <i class="fa fa-bars"></i>
+			</a>
+			
+			<a href="{% url 'home' %}" class="w3-bar-item w3-button w3-theme-l1"> MovieAdvisor </a>
+			<a href="{% url 'recensioni:elenco' '' %}" 
+				class="w3-bar-item w3-button w3-hide-small w3-hover-white"> Recensioni </a>
+			<a href="{% url 'recensioni:ricerca' %}" 
+				class="w3-bar-item w3-button w3-hide-small w3-hover-white"> Ricerca </a>
+			<a href="{% url 'home_reg:contatti' %}" 
+				class="w3-bar-item w3-button w3-hide-small w3-hover-white"> Contatti </a>
+			
+		</div>
+	</div>
+	{% endblock navbar%}
+
+	<!-- Popup di errori -->
+	{% for message in messages %}
+		<script>alert("{{ message }}")</script>
+	{% endfor %}
+
+	{% block sidebar %}
+	<nav class="w3-sidebar w3-bar-block w3-collapse w3-large w3-theme-l5 w3-animate-left" id="mySidebar">
+		<a href="javascript:void(0)" onclick="w3_close()" 
+			class="w3-right w3-xlarge w3-padding-large w3-hover-black w3-hide-large" title="Close Menu">
+			<i class="fa fa-remove"></i>
+		</a>
+		<div class="w3-container">
+			<h4 class="w3-bar-item"><b>Profilo</b></h4>
 			{% if request.user.is_authenticated %}
-				<a href="{% url 'home_reg:welcome' %}">Back to portal</a>
+				<a class="w3-bar-item w3-button w3-hover-black" 
+					href="{% url 'logout' %}"> Logout </a> 
 			{% else %}
-				<a href="{% url 'home' %}" >Back to home</a>
+				<a class="w3-bar-item w3-button w3-hover-black" 
+					href="{% url 'home_reg:welcome' %}"> Login </a> 
+				<a class="w3-bar-item w3-button w3-hover-black" 
+					href="{% url 'home_reg:iscrizione' %}">Iscrizione</a>
 			{% endif %}
-		{% endif %}
-    </footer>
-    
-    <script>
-		function whatTimeIs() {
+
+			{# solo per dare spazio.. #}
+			<div class="" style="height:50px"></div>
+
+			<h4 class="w3-bar-item"><b>Le più ricercate</b></h4>
+			<a class="w3-bar-item w3-button w3-hover-black" href="{% url 'recensioni:elenco' 'Commedia' %}"> Commedie </a>
+			<a class="w3-bar-item w3-button w3-hover-black" href="{% url 'recensioni:elenco' 'Azione' %}"> Azione </a>
+			<a class="w3-bar-item w3-button w3-hover-black" href="{% url 'recensioni:elenco' 'BEST2017' %}"> Migliori 2017 </a>
+			<a class="w3-bar-item w3-button w3-hover-black" href="{% url 'recensioni:elenco' 'BEST2016' %}"> Migliori 2016 </a>
+		</div>
+	</nav>
+	{% endblock sidebar%}
+
+	<!-- Overlay effect when opening sidebar on small screens -->
+	<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" 
+		title="close side menu" id="myOverlay"> </div>
+
+	<!-- Main content: shift it to the right by 250 pixels when the sidebar is visible -->
+	<div class="w3-main" style="margin-left:249px; padding-top:43px;">
+
+		<header class="w3-container w3-red">
+			<h1>{% block bigtitle %} titolo non definito {% endblock %}</h1>
+		</header> 
+		
+		<div class="w3-container" style="min-height:500px">
+			{% block main %}{% endblock %}
+		</div>
+		
+		<!-- Footer -->
+		<div class="w3-row">
+		<footer id="myFooter" style="" class="">
+			<div class="w3-cell-row w3-display-container w3-theme-l2 w3-padding-32" > 
+				<!-- SX -->
+				<div class="w3-cell w3-cell-middle w3-container w3-rest">
+					<h4>
+						<span>&copy; 2017, Django</span>
+						<br />
+						{% if homepage %}
+							<a href="{% url 'admin:index' %}"> Accesso admin </a>
+						{% else %}
+							{% if request.user.is_authenticated %}
+								<a href="{% url 'home_reg:welcome' %}">Back to portal</a>
+							{% else %}
+								<a href="{% url 'home' %}" >Back to home</a>
+							{% endif %}
+						{% endif %}
+					</h4>
+				</div>
+				<!-- DX 0px gli danno il minimo indispensabile.. -->
+				<div class="w3-cell w3-cell-middle w3-container" style="width:0px"> 
+					<h4 id="timeTxt" class="">
+					</h4> 
+				</div>
+			</div>
+			<!-- Powered by W3 -->
+			<div class="w3-container w3-theme-l1">
+				<p> Powered by 
+					<a href="https://www.w3schools.com/w3css/default.asp" 
+					target="_blank">
+						w3.css
+					</a>
+				</p>
+			</div>
+		</footer>
+		</div>
+
+	<!-- END MAIN -->
+	</div>
+		
+	<script>
+
+		// Che ora è?
+		function startTime() {
 			var today=new Date();
 			var h=today.getHours();
 			var m=today.getMinutes();
-			var s=today.getSeconds();
-			h = checkTime(h);
-			m = checkTime(m);
+ 			var s=today.getSeconds();
+ 			h = checkTime(h);
+ 			m = checkTime(m);
 			s = checkTime(s);
-			var text = "Sono le ore "+h+":"+m+":"+s+".";
-			document.getElementById('timeTxt').innerHTML = text;
-			var t = setTimeout(function(){whatTimeIs()},500);
+			document.getElementById('timeTxt').innerHTML = h+":"+m+":"+s;
+			var t = setTimeout(function(){startTime()},500);
+		}
+		// Aggiungo uno zero se necessario
+		function checkTime(i) {
+			if (i<10) {i = "0" + i}; 
+			return i;
 		}
 
-		// add zero in front of numbers < 10
-		function checkTime(num) {
-			if (num<10) {num = "0" + num};  
-			return num;
+		// Get the Sidebar
+		var mySidebar = document.getElementById("mySidebar");
+		// Get the DIV with overlay effect
+		var overlayBg = document.getElementById("myOverlay");
+		// Toggle between showing and hiding the sidebar, and add overlay effect
+		function w3_open() {
+			if (mySidebar.style.display === 'block') {
+				mySidebar.style.display = 'none';
+				overlayBg.style.display = "none";
+			} else {
+				mySidebar.style.display = 'block';
+				overlayBg.style.display = "block";
+			}
+		}
+		// Close the sidebar with the close button
+		function w3_close() {
+			mySidebar.style.display = "none";
+			overlayBg.style.display = "none";
 		}
 	</script>
 
+</body>
 </html>

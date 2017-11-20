@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 
-{% comment  %} Pagina visualizzazione dettagli delle recensioni {% endcomment %}
+{% comment  %} Pagina visualizzazione dettagli delle recensioni 
+
+ATTUALMENTE NON USATA
 
 {% block title %} {{titolo}} {% endblock %}
 {% block bigtitle %}{% endblock %}
 
-{% block body_ext %}
+{% block main %}
 	<h1> {{titolo}} - {{ recensione.titolo }}</h1>
 	<h3> Genere: {{recensione.genere}} </h3>
 	{{ recensione.testo }}
@@ -28,8 +30,15 @@
 		</a>
 		{% for commento in recensione.commento_set.all %}
 			<hr>
-			<h4> {{commento.autore}} - {{commento.voto}} </h4>
-			{{commento.testo}}
+			<h4> 
+				{{commento.autore}} : 
+				{% if commento.voto %}
+					Like
+				{% else %}
+					Dislike
+				{% endif %}
+			</h4>
+			{% if commento.testo %} {{commento.testo}} {% endif %}
 		{% endfor %}
 	{% else %}
 		<h5> Nessun commento da visualizzare. 
@@ -37,3 +46,5 @@
 		tu il primo! </h5>
 	{% endif %}
 {% endblock %}
+
+{% endcomment %}

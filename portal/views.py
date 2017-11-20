@@ -2,9 +2,12 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect
-from portal.forms import ContactForm
+from django.core.urlresolvers import reverse
+
+from portal.forms import ContactForm, SignupForm
 from portal.models import UserProfile
 from portal.utility import anonymous
+
 from LD_Proj.settings import URL_FORM, HOME_URL
 
 HOME_REG_URL = 'portal/index.html'
@@ -46,3 +49,35 @@ def contatti(request):
 		form = ContactForm()
 		context = {'form':form, 'titolo':'Contatti'}
 		return render(request, URL_FORM, context)
+
+# View della pagina per l'iscrizione
+def signup (request):
+	if request.method == 'GET' :
+		form = SignupForm()
+		context = {'form':form, 'titolo':'Iscrizione'}
+		return render(request, URL_FORM, context)
+	else :
+		form = SignupForm(request.POST)
+		if form.is_valid():
+			if form.cleaned_data['password'] != \
+				form.cleaned_data['repeat_password'] :
+				# ERRORE - Password diverse
+				messages.add_message(request, messages.INFO, 
+					'Le due password non sono uguali!')
+				return HttpResponseRedirect(reverse('home_reg:iscrizione'))
+			new_user = form.save(commit=False)
+			# OK
+			new_user.is_active = False
+			new_user.save()
+			messages.add_message(request, messages.INFO, 
+						'Ti sei iscritto correttamente! Attendi la convalida di un admin.')
+			return HttpResponseRedirect(HOME_URL)
+		else:
+			if 'username' not in form.cleaned_data:
+				messages.add_message(request, messages.INFO, 
+					'Spiacente, questo username è già stato preso..')
+			else:
+				# ERRORE - Generico
+				messages.add_message(request, messages.INFO, 
+					'Qualcosa è andato storto, riprova..')
+			return HttpResponseRedirect(reverse('home_reg:iscrizione'))

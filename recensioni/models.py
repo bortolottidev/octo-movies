@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
-from LD_Proj import settings
+from django.shortcuts import get_list_or_404
 from django.conf import settings
+
 from portal.utility import anonymous
 from LD_Proj.utility import objectExist
 
@@ -27,6 +28,7 @@ class Recensione(models.Model):
 	genere = models.CharField(max_length=50, default='sconosciuto')
 	pub_date = models.DateTimeField('date_published', auto_now_add=True)
 	rank = models.IntegerField(default=50)
+	nclicks = models.IntegerField(default=0)
 	
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
@@ -82,14 +84,19 @@ class Recensione(models.Model):
 			self.rank = ratio*100
 			return ;
 	
+	# Aumenta il counter del numero di visite alla recensione
+	def counterClicksUp(self):
+		self.nclicks = self.nclicks + 1
+		self.save()
+
 	# Campi che vogliamo far visualizzare nell'interfaccia admin
 	def campi():
 		return ['titolo', 'testo', 'voto', 'genere',
-		  'autore', 'rank', ]
+		  'autore', 'rank', 'nclicks' ]
 	
 	# Campi non modificabili
 	def __campiSegreti__():
-		return ['rank', ]
+		return ['rank', 'autore', ]
 	
 	def num_voti(self):
 		return self.commento_set.count() 
@@ -105,16 +112,17 @@ class Recensione(models.Model):
 	def getAutore(self):
 		return self.autore
 	
+	# NB Ritorna una lista, non un queryset!
 	def __allRec__():
-		if not Recensione.objects.all() :
-			return [None]
-		return Recensione.objects.all()
+		lista = get_list_or_404(Recensione.objects.order_by('-pub_date'))
+		return lista
 	
 # Il voto alla recensione avviene attraverso il NullBooleanField, che prevede
 # anche un eventuale voto Null ovvero neutrale.
 class Commento(models.Model):
+	# Default .id per evitare problemi di serializzazione
 	recensione = models.ForeignKey(Recensione, on_delete=models.CASCADE,
-								default=Recensione.__allRec__()[0])
+								default=Recensione.__allRec__()[0].id)
 	autore = models.ForeignKey(settings.AUTH_USER_MODEL, 
 							on_delete=models.CASCADE, default=anonymous())
 	voto = models.NullBooleanField(default=0)
