@@ -16,7 +16,7 @@ officialGroup = 'Recensori ufficiali'
 
 # Check di controllo su myUser. Fa parte del gruppo recensori pro?
 def isOfficial (myUser):	
-	group = Group.objects.filter(name=officialGroup)
+	group = Group.objects.get(name=officialGroup).user_set.all()
 	for user in group:
 		if user == myUser:
 			return True

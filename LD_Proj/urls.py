@@ -26,9 +26,9 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^recensioni/', include('recensioni.urls',namespace="recensioni")),
     url(r'^portal/', include('portal.urls', namespace="home_reg")),
-    url(r'^logout/$', views.logout_view, name='logout_view'),
+    url(r'^logout/$', views.logout_view, name='logout'),
     url(r'^login/$', auth_views.LoginView.as_view(template_name='form.html', 
         extra_context={'titolo':'Login'})),
     # per login di default invoca il templates/registration/login.html
-    url(r'^', include('django.contrib.auth.urls')),
+    #url(r'^', include('django.contrib.auth.urls')),
 ] + static (settings.MEDIA_URL, document_root = settings.MEDIA_ROOT) 

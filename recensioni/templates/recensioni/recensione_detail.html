@@ -47,8 +47,9 @@
 	{% else %}
 		<div class="w3-panel w3-pale-yellow w3-border w3-border-yellow">
 			<h5> Nessun commento da visualizzare. 
-			<a href="{% url 'recensioni:comment' recensione.id%}">Scrivi</a>
-			tu il primo! </h5>
+				<a href="{% url 'recensioni:comment' recensione.id%}">
+					Scrivi </a> tu il primo! 
+			</h5>
 		</div>
 	{% endif %}
 {% endblock %}

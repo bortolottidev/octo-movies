@@ -13,7 +13,7 @@ from portal.utility import suggestFilm, anonymous, isOfficial
 from recensioni.forms import CommentForm
 
 url_index = 'recensioni/index.html'
-url_detail = 'recensioni/detail.html'
+url_detail = 'recensioni/recensione_detail.html'
 url_insert = URL_FORM
 url_ricerca = URL_FORM
 
@@ -107,17 +107,17 @@ class top100view (generic.ListView):
 	template_name = url_index
 	
 	def get_queryset(self):
-		list = {}
+		lista_dic = {}
 		for recensione in Recensione.objects.all():
 			if (recensione.num_voti() >= 1):
-				list[recensione]=recensione.num_voti()*recensione.getRank()
-		return sorted(list, key=list.get, reverse=True)[:100]
+				lista_dic[recensione]=recensione.num_voti()*recensione.getRank()
+		return sorted(lista_dic, key=list_dic.get, reverse=True)[:100]
 	
 	def get_context_data(self, **kwargs):
 		context = super(top100view, self).get_context_data(**kwargs)
 		context['recensioni'] = self.get_queryset
 		context['voti_on'] = 1
-		context['titolo'] = 'Top100 Recensioni'
+		context['titolo'] = 'Top 100 Recensioni'
 		return context
 	
 
@@ -152,7 +152,7 @@ def insert_review (request):
 			return HttpResponseRedirect(reverse('recensioni:elenco', kwargs={'filterStr':''}))
 		else:
 			messages.add_message(request, messages.INFO, 
-						'Errore: Hai inserito un tipo di dato non valido.')
+					'Errore: Hai inserito un tipo di dato non valido.')
 			return HttpResponseRedirect(reverse('recensioni:nuovarec'))
 
 # Stesso funzionamento dell'inserimento di nuove recensioni
@@ -167,8 +167,15 @@ def insert_comment (request, rec_id):
 	else :
 		form = CommentForm(request.POST)
 		commento = form.save(commit=False)
-		commento.recensione = recensione
-		commento.autore = request.user
-		commento.save()
-		recensione.__rankUpdate__() 
+		if form.is_valid():
+			anonRequested = form.cleaned_data['anonymous']
+			# Default anonimo, aggiorno se non richiesto
+			if not anonRequested :
+				commento.autore = request.user
+			commento.recensione = recensione
+			commento.save()
+			recensione.__rankUpdate__()
+		else:
+			messages.add_message(request, messages.INFO, 
+					"Errore: Qualcosa è andato storto nell'inserimento..")
 		return render(request, url_detail, {'recensione':recensione})

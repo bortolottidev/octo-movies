@@ -23,7 +23,7 @@ class UserProfile(Model):
 		vect = []
 		
 	def __str__(self):
-		return str(self.user)+" profilo" 
+		return "Profilo di "+str(self.user) 
 	
 	def getUserId(self):
 		return self.user.id

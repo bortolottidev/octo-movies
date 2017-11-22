@@ -15,7 +15,7 @@
 						class="w3-button w3-circle w3-light-grey w3-ripple w3-tiny">
 						{{forloop.counter}} 
 					</a>
-                    {{recensione.titolo}} 
+                    {{recensione.titolo|truncatechars:25}} 
                     {% if clicks_on %}
                     	-- {{ recensione.nclicks }} click{{ recensione.nclicks|pluralize }}!
                     {% elif voti_on %} 

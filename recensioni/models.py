@@ -96,7 +96,7 @@ class Recensione(models.Model):
 	
 	# Campi non modificabili
 	def __campiSegreti__():
-		return ['rank', 'autore', ]
+		return ['rank', 'autore', 'nclicks']
 	
 	def num_voti(self):
 		return self.commento_set.count() 
@@ -122,20 +122,23 @@ class Recensione(models.Model):
 class Commento(models.Model):
 	# Default .id per evitare problemi di serializzazione
 	recensione = models.ForeignKey(Recensione, on_delete=models.CASCADE,
-								default=Recensione.__allRec__()[0].id)
+								default=anonymous())
 	autore = models.ForeignKey(settings.AUTH_USER_MODEL, 
 							on_delete=models.CASCADE, default=anonymous())
 	voto = models.NullBooleanField(default=0)
 	testo = models.TextField(max_length=150, blank=True)
-		
+	
 	# Campi visualizzabili in interfaccia admin
 	def __campi__():
 		return ['recensione', 'autore', 'voto', 'testo']
 	# Campi non modificabili 
 	def __campisegreti__():
-		return ['recensione', ]	
+		return ['recensione', 'autore']	
+	
+	# Riassunto
 	def __str__(self):
-		return self.testo
+		return self.testo[:20]
+	
     
 """    
  Modello per i tag associati ad una recensione di un film

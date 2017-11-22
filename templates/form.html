@@ -8,7 +8,10 @@
 
 	<form class="w3-container" method="POST"> 
 		{% csrf_token %}
+		
+		{# Stampa automaticamente i campi presenti dentro form come una lista. #}
 		{{form.as_p}}
+		
 		<p> 
 			<input type="submit" class="w3-btn w3-hover-grey w3-red w3-round" 
 				value="Invia!" /> 
