@@ -67,6 +67,7 @@ def signup (request):
 				return HttpResponseRedirect(reverse('home_reg:iscrizione'))
 			new_user = form.save(commit=False)
 			# OK
+			new_user.set_password(form.cleaned_data['password'])
 			new_user.is_active = False
 			new_user.save()
 			messages.add_message(request, messages.INFO, 

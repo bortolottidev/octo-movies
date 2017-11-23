@@ -11,9 +11,12 @@ class ContactForm(forms.Form):
 # Form per le iscrizioni
 class SignupForm(forms.ModelForm) :
 
-	repeat_password = forms.CharField(max_length = 100, required=True)
+	password = forms.CharField(max_length = 100, \
+			widget=forms.PasswordInput, required=True)
+	repeat_password = forms.CharField(max_length = 100, \
+			widget=forms.PasswordInput, required=True)
 
 	class Meta:
 		model = User
-		fields = ['username','password', 'repeat_password', 
+		fields = ['username', 'password', 'repeat_password', 
 			'email','first_name','last_name']
