@@ -23,6 +23,8 @@ class ReviewForm(forms.ModelForm) :
 
 # Form per inserimento commenti
 class CommentForm(forms.ModelForm) :
+	anonymous = forms.BooleanField( label = 'Pubblica come anonimo',
+		required=False )
 	class Meta:
 		model = Commento
 		fields = Commento.__campi__()

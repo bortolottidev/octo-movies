@@ -32,7 +32,9 @@
 			<p class="w3-border-bottom">
 				<h4> 
 					{{commento.autore}} : 
-					{% if commento.voto %}
+					{% if commento.voto == NULL %}
+						Commento Neutro
+					{% elif commento.voto %}
 						<img alt="[LikeIMG]" height="30"
 							src="{% static 'recensioni/img/like.png' %}" />
 						{#<img alt="wtf" src="/static/recensioni/img/like.png" /> #}

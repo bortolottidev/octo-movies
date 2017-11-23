@@ -11,6 +11,7 @@ def commentsAnalyzer(self, recensione, found):
 		return True, 1
 	voto = 0
 	found = False
+	# Ottimizzabile ordinando i risultati dall'ultimo
 	for commento in recensione.commento_set.all():
 		if commento.autore.id == self.getUserId():
 			found = True

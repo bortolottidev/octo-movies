@@ -21,8 +21,8 @@
                     {% elif voti_on %} 
 						-- {{ recensione.num_voti }} 
 						comment{{ recensione.num_voti|pluralize }} --
-						{{ recensione.getRank|truncatechars:7 }} % apprezzamento
-                    {% endif %} 
+						{{ recensione.getRank|truncatechars:7 }} % apprezzamento 
+					{% endif %} 
 				</p>
 			</div>
 		{% endfor %}

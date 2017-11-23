@@ -71,8 +71,11 @@ class Recensione(models.Model):
 		voti_null = (voti_tot - voti_neg - voti_pos)*0.5
 		voti_neg = voti_neg*0.5
 		# tolgo il "peso" di troppo - complementare a quanto sto usando
-		voti_tot = voti_tot - (voti_null*0.5) - (voti_neg*0.5)
+		#voti_tot = voti_tot - (voti_null*0.5) - (voti_neg*0.5)
+		voti_tot = voti_tot - voti_null - voti_neg
 		ratio = (voti_null + voti_pos - voti_neg) / voti_tot
+		#print("Voti: ", voti_tot, "\nVoti NULL: ", voti_null, "\nVoti Pos: ",voti_pos)
+		#print("Voti Neg: ", voti_neg, "\nRatio: ", ratio)
 		try:
 			if (ratio < 0) or (ratio > 1):
 				raise Exception(1234, "Ratio isn't a ratio!")

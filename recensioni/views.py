@@ -111,7 +111,7 @@ class top100view (generic.ListView):
 		for recensione in Recensione.objects.all():
 			if (recensione.num_voti() >= 1):
 				lista_dic[recensione]=recensione.num_voti()*recensione.getRank()
-		return sorted(lista_dic, key=list_dic.get, reverse=True)[:100]
+		return sorted(lista_dic, key=lista_dic.get, reverse=True)[:100]
 	
 	def get_context_data(self, **kwargs):
 		context = super(top100view, self).get_context_data(**kwargs)

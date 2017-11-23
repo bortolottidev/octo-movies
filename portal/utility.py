@@ -36,8 +36,12 @@ def suggestFilm (myUser):
 			nearbyList = eval(getattr(nearbyUser, "userprofile").getVect())
 			count = 0
 			for i in models.Recensione.__allRec__():
+				#print("Recensione - ", i, " - me ", myList[count], " - lui", nearbyList[count])
 				if (myList[count] != nearbyList[count]):
 					suggList.append(i)
+				# Più corretto, ma troppo restrittivo nel nostro toy db
+				#if ((myList[count] == 0) and (nearbyList[count] == 1)):
+				#	suggList.append(i)
 				count = count+1
 		except:
 			return []
