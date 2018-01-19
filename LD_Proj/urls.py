@@ -31,4 +31,6 @@ urlpatterns = [
         extra_context={'titolo':'Login'})),
     # per login di default invoca il templates/registration/login.html
     #url(r'^', include('django.contrib.auth.urls')),
-] + static (settings.MEDIA_URL, document_root = settings.MEDIA_ROOT) 
+] + static (settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
+
+ciao
